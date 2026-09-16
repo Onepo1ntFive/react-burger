@@ -1,5 +1,31 @@
 body {
   margin: 0;
+  font-family: 'Jet Brains Mono', serif;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+:root {
+  --interface-modal-bg: #1c1c21;
+  --interface-modal-overlay-bg: rgb(0 0 0 / 60%);
+  --text-secondary: #6666d9;
+}
+
+.font_iceland {
+  font-family: 'Iceland', serif !important;
+}
+
+.tab {
+  width: 33.33%;
+  min-width: 0;
 }
 
 /* Fix for scrollbar */
