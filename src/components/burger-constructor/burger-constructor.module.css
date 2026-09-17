@@ -2,10 +2,30 @@
   display: flex;
   flex-flow: column nowrap;
   width: calc(50% - 20px);
+  height: 100%;
 }
 
 .burger_constructor_list {
+  display: flex;
+  flex-flow: column nowrap;
+  max-height: calc(100% - 144px);
+}
+
+.burger_constructor_items {
+  flex: 1 auto;
   overflow-y: auto;
+}
+
+.burger_constructor_item {
+  position: relative;
+  padding-left: 32px;
+}
+
+.burger_constructor_item > svg {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
 }
 
 .burger_constructor_bottom {

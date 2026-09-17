@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { BurgerIngredient } from '@components/burger-ingredient/burger-ingredient.tsx';
 import { IngredientDetails } from '@components/ingredient-details/ingredient-details.tsx';
+import { Modal } from '@components/modal/modal.tsx';
 
 import type { TIngredient } from '@utils/types';
 
@@ -71,9 +72,7 @@ export const BurgerIngredients = ({
                   ''
                 )}
                 <BurgerIngredient
-                  onClick={() => {
-                    showIngredientDetails(item._id);
-                  }}
+                  onClick={() => showIngredientDetails(item._id)}
                   key={key}
                   ingredient={item}
                 />
@@ -82,12 +81,12 @@ export const BurgerIngredients = ({
         })}
       </div>
       {isIngredientDetailsVisible && ingredient && (
-        <IngredientDetails
-          onClose={() => {
-            setIsIngredientDetailsVisible(false);
-          }}
-          ingredient={ingredient}
-        />
+        <Modal
+          onClose={() => setIsIngredientDetailsVisible(false)}
+          title={'Детали ингредиента'}
+        >
+          <IngredientDetails ingredient={ingredient} />
+        </Modal>
       )}
     </section>
   );
