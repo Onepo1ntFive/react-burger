@@ -1,5 +1,5 @@
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import { BurgerIngredient } from '@components/burger-ingredient/burger-ingredient.tsx';
 import { IngredientDetails } from '@components/ingredient-details/ingredient-details.tsx';
@@ -59,7 +59,7 @@ export const BurgerIngredients = ({
           return ingredients
             .filter((el) => el.type === key)
             .map((item, index) => (
-              <>
+              <Fragment key={`${item.type}-${index}`}>
                 {index === 0 ? (
                   <p
                     className={`${styles.burger_ingredients_title} text text_type_main-medium pt-10 pb-6`}
@@ -73,10 +73,9 @@ export const BurgerIngredients = ({
                 )}
                 <BurgerIngredient
                   onClick={() => showIngredientDetails(item._id)}
-                  key={key}
                   ingredient={item}
                 />
-              </>
+              </Fragment>
             ));
         })}
       </div>

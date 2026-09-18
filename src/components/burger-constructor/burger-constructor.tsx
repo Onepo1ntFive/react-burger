@@ -4,7 +4,7 @@ import {
   CurrencyIcon,
   DragIcon,
 } from '@krgaa/react-developer-burger-ui-components';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import { Modal } from '@components/modal/modal.tsx';
 import { OrderDetails } from '@components/order-details/order-details.tsx';
@@ -51,8 +51,6 @@ export const BurgerConstructor = ({
 
   const [isOrderDetailsVisible, setIsOrderDetailsVisible] = useState<boolean>(false);
 
-  console.log(ingredients);
-
   return (
     <>
       {ingredients.length && (
@@ -73,8 +71,8 @@ export const BurgerConstructor = ({
               />
             </div>
             <div className={`custom-scroll ${styles.burger_constructor_items}`}>
-              {ingredients.map((item, _) => (
-                <>
+              {ingredients.map((item, index) => (
+                <Fragment key={`constructor-${item.type}-${index}`}>
                   {item.type !== 'bun' && (
                     <div className={`${styles.burger_constructor_item} mb-4 pr-2`}>
                       <DragIcon type={'primary'} />
@@ -86,7 +84,7 @@ export const BurgerConstructor = ({
                       />
                     </div>
                   )}
-                </>
+                </Fragment>
               ))}
             </div>
             {/* временная затычка до организации логики конструктора */}
