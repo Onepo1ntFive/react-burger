@@ -1,0 +1,37 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9998;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--interface-modal-overlay-bg);
+  pointer-events: none;
+}
+
+.modal_inner {
+  width: 100%;
+  max-width: 720px;
+  background-color: var(--interface-modal-bg);
+  border-radius: 40px;
+  pointer-events: all;
+}
+
+.modal_header {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal_header svg {
+  margin-left: auto;
+}
+
+.modal_close {
+  cursor: pointer;
+}

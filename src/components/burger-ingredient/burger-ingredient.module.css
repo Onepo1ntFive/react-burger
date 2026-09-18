@@ -1,0 +1,19 @@
+.burger_ingredient {
+  width: calc(50% - 12px);
+  text-align: center;
+  cursor: pointer;
+}
+
+.burger_ingredient_price {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.burger_ingredient_img {
+  display: block;
+  width: 240px;
+  max-width: 100%;
+  aspect-ratio: 240 / 124;
+}
