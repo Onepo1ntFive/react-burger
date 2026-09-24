@@ -1,0 +1,27 @@
+.ingredient_details {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.ingredient_ingredients {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  width: 100%;
+  color: var(--text-secondary);
+}
+
+.ingredient_ingredients_img {
+  display: block;
+  width: 480px;
+  max-width: 100%;
+  aspect-ratio: 480 / 240;
+}
+
+.ingredient_ingredients span {
+  display: block;
+  font-size: 28px;
+}
