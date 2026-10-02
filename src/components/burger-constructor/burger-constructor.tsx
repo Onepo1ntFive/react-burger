@@ -1,13 +1,26 @@
+import { type TOrderDetails, usePostOrderMutation } from '@api/orderApi.ts';
 import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from '@krgaa/react-developer-burger-ui-components';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
+import { useDrop } from 'react-dnd';
+import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { ConstructorIngredient } from '@components/constructor-ingredient/constructor-ingredient.tsx';
 import { Modal } from '@components/modal/modal.tsx';
 import { OrderDetails } from '@components/order-details/order-details.tsx';
+import {
+  addIngredient,
+  clearConstructor,
+  moveIngredient,
+  removeIngredient,
+  selectBun,
+  selectConstructorIngredients,
+  setBun,
+} from '@services/burgerConstructor/slice.ts';
 
 import type { TIngredient } from '@utils/types';
 
@@ -19,111 +32,198 @@ type TBurgerConstructorProps = {
 
 type TConstructorElementType = 'top' | 'bottom' | undefined;
 
+type TDropItem = {
+  _id: string;
+};
+
+type TOrderResponse = {
+  data?: {
+    success?: boolean;
+    order?: {
+      number?: number;
+    };
+  };
+  error?: {
+    data?: {
+      message?: string;
+    };
+  };
+};
+
 export const BurgerConstructor = ({
   ingredients,
 }: TBurgerConstructorProps): React.JSX.Element => {
-  const constructorElementType = (
-    index: number,
-    itemsLength: number
-  ): TConstructorElementType => {
-    if (!index && index !== 0) {
-      return undefined;
-    }
-    if (index === 0) {
-      return 'top';
-    }
-    if (index === itemsLength - 1) {
-      return 'bottom';
+  const dispatch = useDispatch();
+  const [postOrder, { isLoading }] = usePostOrderMutation();
+  const selectedBun = useSelector(selectBun);
+  const selectedIngredients = useSelector(selectConstructorIngredients);
+  const [isOrderDetailsVisible, setIsOrderDetailsVisible] = useState<boolean>(false);
+  const [orderDetails, setOrderDetails] = useState<TOrderDetails | null>(null);
+
+  const [{ isOver, canDrop }, dropTarget] = useDrop({
+    accept: 'ingredient',
+    drop(itemId: TDropItem) {
+      const item = findIngredientById(itemId._id);
+      if (item?.type === 'bun') {
+        dispatch(setBun(item));
+      } else if (item) {
+        dispatch(addIngredient(item));
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  });
+
+  const findIngredientById = (id: string): TIngredient | undefined =>
+    ingredients.find((item) => item._id === id);
+
+  const moveIngredientHandler = (fromIndex: number, toIndex: number): void => {
+    dispatch(moveIngredient({ fromIndex, toIndex }));
+  };
+
+  const removeIngredientHandler = (key: string): void => {
+    dispatch(removeIngredient(key));
+  };
+
+  const totalPrice =
+    (selectedBun ? selectedBun.price * 2 : 0) +
+    selectedIngredients.reduce((sum, item) => sum + item.price, 0);
+
+  const postOrderHandler = async (): Promise<void> => {
+    const preparedOrder: string[] = selectedIngredients.map((el: TIngredient) => el._id);
+
+    if (selectedBun && selectedIngredients) {
+      try {
+        const response: TOrderResponse = await postOrder({
+          ingredients: [selectedBun._id, ...preparedOrder, selectedBun._id],
+        });
+
+        if (response?.error) {
+          toast.error(`ERROR: ${response.error?.data?.message}`);
+        }
+
+        if (response?.data?.success) {
+          toast.success('Успех!');
+          setOrderDetails(response.data as TOrderDetails);
+          setIsOrderDetailsVisible(true);
+          dispatch(clearConstructor());
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      toast('Надо чот выбрать..', {
+        icon: '🤔',
+      });
     }
   };
 
   const customName = (type: TConstructorElementType, name: string): string => {
-    if (type === undefined) {
-      return name;
-    }
     if (type === 'top') {
       return `${name} (верх)`;
     }
     if (type === 'bottom') {
       return `${name} (низ)`;
     }
+    return name;
   };
-
-  const [isOrderDetailsVisible, setIsOrderDetailsVisible] = useState<boolean>(false);
 
   return (
     <>
-      {ingredients.length && (
-        <section className={`${styles.burger_constructor} pt-25`}>
-          <div className={`${styles.burger_constructor_list}`}>
-            {/* временная затычка до организации логики конструктора */}
-            <div className={`${styles.burger_constructor_item} mb-4 pr-2`}>
+      <section className={`${styles.burger_constructor} pt-25`}>
+        <div
+          className={`${styles.burger_constructor_list} ${isOver || canDrop ? styles.burger_constructor_active : ''}`}
+          ref={dropTarget}
+        >
+          <div className={`${styles.burger_constructor_item} mb-4 pr-2`}>
+            {selectedBun ? (
               <ConstructorElement
-                key={ingredients[0]._id}
-                price={ingredients[0].price}
-                text={customName(
-                  constructorElementType(0, ingredients.length),
-                  ingredients[0].name
-                )}
+                key={`${selectedBun._id}-top`}
+                price={selectedBun.price}
+                text={customName('top', selectedBun.name)}
                 isLocked
-                thumbnail={ingredients[0].image}
-                type={constructorElementType(0, ingredients.length)}
+                thumbnail={selectedBun.image}
+                type={'top'}
               />
-            </div>
-            <div className={`custom-scroll ${styles.burger_constructor_items}`}>
-              {ingredients.map((item, index) => (
-                <Fragment key={`constructor-${item.type}-${index}`}>
-                  {item.type !== 'bun' && (
-                    <div className={`${styles.burger_constructor_item} mb-4 pr-2`}>
-                      <DragIcon type={'primary'} />
-                      <ConstructorElement
-                        key={item._id}
-                        price={item.price}
-                        text={item.name}
-                        thumbnail={item.image}
-                      />
-                    </div>
-                  )}
-                </Fragment>
-              ))}
-            </div>
-            {/* временная затычка до организации логики конструктора */}
-            <div className={`${styles.burger_constructor_item} mb-4 pr-2`}>
+            ) : (
               <ConstructorElement
-                key={ingredients[0]._id}
-                price={ingredients[0].price}
-                text={customName(
-                  constructorElementType(ingredients.length - 1, ingredients.length),
-                  ingredients[0].name
-                )}
-                isLocked
-                thumbnail={ingredients[0].image}
-                type={constructorElementType(ingredients.length - 1, ingredients.length)}
+                price={0}
+                text={'Выберите булки'}
+                thumbnail={'image'}
+                type={'top'}
+                extraClass={`${styles.burger_constructor_empty} empty`}
               />
-            </div>
+            )}
           </div>
-          <div className={`${styles.burger_constructor_bottom} pt-10 pb-10`}>
-            <div
-              className={`${styles.burger_constructor_price} text text_type_main-large font_iceland pr-10`}
-            >
-              88610 <CurrencyIcon className={'ml-2'} type="primary" />
-            </div>
-            <Button
-              onClick={() => setIsOrderDetailsVisible(true)}
-              htmlType="button"
-              size="large"
-              type="primary"
-            >
-              Оформить заказ
-            </Button>
+          <div className={`custom-scroll ${styles.burger_constructor_items}`}>
+            {selectedIngredients.length ? (
+              selectedIngredients.map((item, index) => (
+                <ConstructorIngredient
+                  key={item.key}
+                  ingredient={item}
+                  index={index}
+                  onMove={moveIngredientHandler}
+                  onRemove={removeIngredientHandler}
+                />
+              ))
+            ) : (
+              <div className={`${styles.burger_constructor_item} mb-4 pr-2`}>
+                <ConstructorElement
+                  price={0}
+                  text={'Выберите начинки'}
+                  thumbnail={'image'}
+                  extraClass={`${styles.burger_constructor_empty} empty`}
+                />
+              </div>
+            )}
           </div>
-          {isOrderDetailsVisible && (
-            <Modal onClose={() => setIsOrderDetailsVisible(false)}>
-              <OrderDetails />
-            </Modal>
-          )}
-        </section>
-      )}
+          <div className={`${styles.burger_constructor_item} mb-4 pr-2`}>
+            {selectedBun ? (
+              <ConstructorElement
+                key={`${selectedBun._id}-bottom`}
+                price={selectedBun.price}
+                text={customName('bottom', selectedBun.name)}
+                isLocked
+                thumbnail={selectedBun.image}
+                type={'bottom'}
+              />
+            ) : (
+              <ConstructorElement
+                price={0}
+                text={'Выберите булки'}
+                thumbnail={'image'}
+                type={'bottom'}
+                extraClass={`${styles.burger_constructor_empty} empty`}
+              />
+            )}
+          </div>
+        </div>
+        <div className={`${styles.burger_constructor_bottom} pt-10 pb-10`}>
+          <div
+            className={`${styles.burger_constructor_price} text text_type_main-large font_iceland pr-10`}
+          >
+            {totalPrice} <CurrencyIcon className={'ml-2'} type="primary" />
+          </div>
+          <Button
+            onClick={() => {
+              void postOrderHandler();
+            }}
+            disabled={isLoading}
+            htmlType="button"
+            size="large"
+            type="primary"
+          >
+            Оформить заказ
+          </Button>
+        </div>
+        {isOrderDetailsVisible && orderDetails && (
+          <Modal onClose={() => setIsOrderDetailsVisible(false)}>
+            <OrderDetails orderDetails={orderDetails} />
+          </Modal>
+        )}
+      </section>
     </>
   );
 };

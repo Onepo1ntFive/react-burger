@@ -28,6 +28,25 @@ html {
   min-width: 0;
 }
 
+.constructor-element.empty {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.constructor-element.empty .constructor-element__image,
+.constructor-element.empty .constructor-element__action,
+.constructor-element.empty .constructor-element__price {
+  display: none !important;
+}
+
+.notif {
+  padding: 10px;
+  font-family: 'Jet Brains Mono', serif;
+}
+
 /* Fix for scrollbar */
 
 @supports (scrollbar-color: auto) {

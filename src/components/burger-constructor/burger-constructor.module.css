@@ -6,9 +6,31 @@
 }
 
 .burger_constructor_list {
+  position: relative;
   display: flex;
   flex-flow: column nowrap;
   max-height: calc(100% - 144px);
+  transition: opacity 0.5s ease-in-out;
+}
+
+.burger_constructor_list::before {
+  position: absolute;
+  top: -10px;
+  left: 5px;
+  z-index: 100;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: calc(100% + 20px);
+  background-color: rgb(19 19 22 / 70%);
+  border: 2px dashed #fff;
+  border-radius: 30px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+  content: 'Тащи сюда';
 }
 
 .burger_constructor_items {
@@ -19,6 +41,14 @@
 .burger_constructor_item {
   position: relative;
   padding-left: 32px;
+}
+
+.burger_constructor_empty {
+  position: relative;
+}
+
+.burger_constructor_active::before {
+  opacity: 1;
 }
 
 .burger_constructor_item > svg {
