@@ -1,7 +1,13 @@
 .burger_ingredient {
+  position: relative;
   width: calc(50% - 12px);
   text-align: center;
   cursor: pointer;
+}
+
+.burger_ingredient_counter {
+  top: 16px;
+  right: 16px;
 }
 
 .burger_ingredient_price {

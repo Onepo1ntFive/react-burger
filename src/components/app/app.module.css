@@ -132,7 +132,7 @@ table {
 
 .app {
   display: flex;
-  flex-direction: column;
+  flex-flow: column nowrap;
   height: 100vh;
   color: var(--text-primary-color);
   background-color: var(--background-alt);
@@ -147,10 +147,9 @@ table {
 
 .main {
   display: flex;
-  justify-content: space-between;
+  flex: 1 auto;
   width: 100%;
   max-width: 1240px;
-  height: 100%;
+  height: 0;
   margin: 0 auto;
-  overflow: hidden;
 }

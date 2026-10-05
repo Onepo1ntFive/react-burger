@@ -1,0 +1,12 @@
+.constructor_ingredient {
+  position: relative;
+  padding-left: 32px;
+  cursor: move;
+}
+
+.constructor_ingredient > svg {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
