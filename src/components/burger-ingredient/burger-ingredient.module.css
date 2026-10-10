@@ -23,3 +23,8 @@
   max-width: 100%;
   aspect-ratio: 240 / 124;
 }
+
+.burger_ingredient_link {
+  color: #fff;
+  text-decoration: none;
+}

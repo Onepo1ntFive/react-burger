@@ -17,6 +17,7 @@ html {
   --interface-modal-bg: #1c1c21;
   --interface-modal-overlay-bg: rgb(0 0 0 / 60%);
   --text-secondary: #6666d9;
+  --text-inactive: #8585ad;
 }
 
 .font_iceland {
@@ -38,13 +39,60 @@ html {
 
 .constructor-element.empty .constructor-element__image,
 .constructor-element.empty .constructor-element__action,
-.constructor-element.empty .constructor-element__price {
+.constructor-element.emptys .constructor-element__price {
   display: none !important;
+}
+
+.text_color_default {
+  color: #fff;
 }
 
 .notif {
   padding: 10px;
   font-family: 'Jet Brains Mono', serif;
+}
+
+.form form {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.form a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.form a:hover {
+  text-decoration: underline;
+}
+
+.button {
+  position: relative;
+  transition-timing-function: ease-in-out;
+  transition-duration: 0.2s;
+  transition-property: color, opacity, background;
+}
+
+.button::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  color: #fff;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  content: 'Лоадинх..';
+}
+
+.button-loading {
+  color: transparent;
+}
+
+.button-loading::before {
+  opacity: 1;
 }
 
 /* Fix for scrollbar */

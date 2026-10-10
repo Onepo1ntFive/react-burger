@@ -1,46 +1,62 @@
-import { useGetIngredientsQuery } from '@api/ingredientsApi.ts';
-import { useMemo } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Toaster } from 'react-hot-toast';
+import {
+  PageFeed,
+  PageForgotPassword,
+  PageHome,
+  PageIngredientDetail,
+  PageLogin,
+  PageProfile,
+  PageProfileOrder,
+  PageRegister,
+  PageResetPassword,
+} from '@/pages';
+import { useEffect } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
-import { AppHeader } from '@components/app-header/app-header';
-import { BurgerConstructor } from '@components/burger-constructor/burger-constructor.tsx';
-import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients';
+import { IngredientModal } from '@components/ingredient-modal/ingredient-modal.tsx';
+import { ProtectedRoute } from '@components/protected-route/protected-route.tsx';
+import { useAppDispatch } from '@services/hooks.ts';
+import { checkUserAuth } from '@services/user/actions.ts';
 
-import type { TIngredient } from '@utils/types.ts';
+import type { TLocationState } from '@utils/types.ts';
 
 import 'normalize.css';
 
-import styles from './app.module.css';
-
 export const App = (): React.JSX.Element => {
-  const { data, isLoading } = useGetIngredientsQuery();
+  const location = useLocation();
+  const dispatch = useAppDispatch();
+  const backgroundLocation = (location.state as TLocationState | null)
+    ?.backgroundLocation;
 
-  const ingredients: TIngredient[] | [] = useMemo(
-    () => (data?.success ? data.data : []),
-    [data]
-  );
+  useEffect(() => {
+    void dispatch(checkUserAuth());
+  }, [dispatch]);
+
   return (
     <>
-      <div className={styles.app}>
-        <AppHeader />
-        <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
-          Соберите бургер
-        </h1>
-        <main className={`${styles.main} p-5`}>
-          <Toaster
-            toastOptions={{
-              className: 'notif',
-              position: 'bottom-center',
-            }}
-          />
-          <DndProvider backend={HTML5Backend}>
-            <BurgerIngredients ingredients={ingredients} isLoading={isLoading} />
-            <BurgerConstructor ingredients={ingredients} />
-          </DndProvider>
-        </main>
-      </div>
+      <Routes location={backgroundLocation ?? location}>
+        <Route path="/" element={<PageHome />} />
+        <Route path="/ingredients/:id" element={<PageIngredientDetail />} />
+        <Route path="/feed" element={<PageFeed />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/profile" element={<PageProfile />}>
+            <Route path="orders" element={<PageProfileOrder />} />
+          </Route>
+        </Route>
+
+        <Route element={<ProtectedRoute onlyUnAuth />}>
+          <Route path="/register" element={<PageRegister />} />
+          <Route path="/login" element={<PageLogin />} />
+          <Route path="/forgot-password" element={<PageForgotPassword />} />
+          <Route path="/reset-password" element={<PageResetPassword />} />
+        </Route>
+      </Routes>
+
+      {backgroundLocation && (
+        <Routes>
+          <Route path="/ingredients/:id" element={<IngredientModal />} />
+        </Routes>
+      )}
     </>
   );
 };

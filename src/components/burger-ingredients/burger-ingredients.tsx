@@ -1,13 +1,10 @@
 import { Preloader, Tab } from '@krgaa/react-developer-burger-ui-components';
 import { Fragment, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { BurgerIngredient } from '@components/burger-ingredient/burger-ingredient.tsx';
-import { IngredientDetails } from '@components/ingredient-details/ingredient-details.tsx';
-import { Modal } from '@components/modal/modal.tsx';
+import { IngredientModal } from '@components/ingredient-modal/ingredient-modal.tsx';
 import {
-  closeIngredientDetails,
-  openIngredientDetails,
   selectIngredient,
   selectIsIngredientDetailsVisible,
 } from '@services/ingredient/slice.ts';
@@ -42,7 +39,6 @@ export const BurgerIngredients = ({
     return [];
   }, [ingredients]);
 
-  const dispatch = useDispatch();
   const ingredient = useSelector(selectIngredient);
   const isIngredientDetailsVisible = useSelector(selectIsIngredientDetailsVisible);
 
@@ -140,22 +136,12 @@ export const BurgerIngredients = ({
                   ) : (
                     ''
                   )}
-                  <BurgerIngredient
-                    onClick={() => dispatch(openIngredientDetails(item._id))}
-                    ingredient={item}
-                  />
+                  <BurgerIngredient ingredient={item} />
                 </Fragment>
               ));
             })}
           </div>
-          {isIngredientDetailsVisible && ingredient && (
-            <Modal
-              onClose={() => dispatch(closeIngredientDetails())}
-              title={'Детали ингредиента'}
-            >
-              <IngredientDetails ingredient={ingredient} />
-            </Modal>
-          )}
+          {isIngredientDetailsVisible && ingredient && <IngredientModal />}
         </>
       )}
     </section>
