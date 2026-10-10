@@ -1,6 +1,7 @@
 import { Counter, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
 import { useDrag } from 'react-dnd';
 import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 
 import { selectAllIngredients } from '@services/burgerConstructor/slice.ts';
 
@@ -10,13 +11,12 @@ import styles from './burger-ingredient.module.css';
 
 type TBurgerIngredientsProps = {
   ingredient: TIngredient;
-  onClick?: () => void;
 };
 
 export const BurgerIngredient = ({
   ingredient,
-  onClick,
 }: TBurgerIngredientsProps): React.JSX.Element => {
+  const location = useLocation();
   const { _id } = ingredient;
   const [{ isDrag }, dragRef] = useDrag({
     type: 'ingredient',
@@ -35,29 +35,35 @@ export const BurgerIngredient = ({
   return (
     <div
       className={`p-4 ${styles.burger_ingredient} ${isDrag ? 'isDrag' : ''}`}
-      onClick={onClick}
       ref={dragRef}
     >
-      {count ? (
-        <Counter
-          count={ingredient.type === 'bun' ? count * 2 : count}
-          size="default"
-          extraClass={`${styles.burger_ingredient_counter}`}
-        />
-      ) : (
-        ''
-      )}
-      <img
-        className={`${styles.burger_ingredient_img} pb-1`}
-        src={ingredient.image}
-        alt={ingredient.name}
-      />
-      <p
-        className={`${styles.burger_ingredient_price} text text_type_main-medium font_iceland pb-1`}
+      <Link
+        className={styles.burger_ingredient_link}
+        to={`/ingredients/${ingredient._id}`}
+        key={ingredient._id}
+        state={{ backgroundLocation: location }}
       >
-        {ingredient.price} <CurrencyIcon className={'ml-2'} type="primary" />
-      </p>
-      <p className={'text'}>{ingredient.name}</p>
+        {count ? (
+          <Counter
+            count={ingredient.type === 'bun' ? count * 2 : count}
+            size="default"
+            extraClass={`${styles.burger_ingredient_counter}`}
+          />
+        ) : (
+          ''
+        )}
+        <img
+          className={`${styles.burger_ingredient_img} pb-1`}
+          src={ingredient.image}
+          alt={ingredient.name}
+        />
+        <p
+          className={`${styles.burger_ingredient_price} text text_type_main-medium font_iceland pb-1`}
+        >
+          {ingredient.price} <CurrencyIcon className={'ml-2'} type="primary" />
+        </p>
+        <p className={'text'}>{ingredient.name}</p>
+      </Link>
     </div>
   );
 };

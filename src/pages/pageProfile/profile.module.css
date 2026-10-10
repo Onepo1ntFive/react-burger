@@ -1,0 +1,37 @@
+.profile {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+  max-width: 1200px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.profile_nav {
+  width: 320px;
+  padding-right: 60px;
+}
+
+.profile_nav a,
+.profile_nav button {
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-decoration: none;
+}
+
+.profile_nav a:hover,
+.profile_nav button:hover {
+  color: #fff;
+}
+
+.profile_content {
+  width: calc(100% - 320px);
+}
+
+.profile_content > div {
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-right: 0;
+  margin-left: 0;
+}

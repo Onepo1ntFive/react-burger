@@ -14,17 +14,17 @@ const initialState: TModalState = {
   ingredients: [],
 };
 
-export const ingredientModalSlice = createSlice({
-  name: 'ingredientModal',
+export const ingredientSlice = createSlice({
+  name: 'ingredient',
   initialState,
   reducers: {
-    openIngredientDetails: (state, action: PayloadAction<string>) => {
+    setIngredientForDetails: (state, action: PayloadAction<string>) => {
       const i = state.ingredients.filter((el) => action.payload === el._id);
       if (i.length) {
         state.ingredient = i[0];
       }
     },
-    closeIngredientDetails: (state) => {
+    clearIngredientForDetails: (state) => {
       state.ingredient = null;
     },
   },
@@ -42,7 +42,7 @@ export const ingredientModalSlice = createSlice({
   },
 });
 
-export const { openIngredientDetails, closeIngredientDetails } =
-  ingredientModalSlice.actions;
+export const { setIngredientForDetails, clearIngredientForDetails } =
+  ingredientSlice.actions;
 export const { selectIngredient, selectIsIngredientDetailsVisible } =
-  ingredientModalSlice.selectors;
+  ingredientSlice.selectors;

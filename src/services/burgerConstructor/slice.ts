@@ -1,22 +1,19 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSelector, createSlice, nanoid } from '@reduxjs/toolkit';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '@services/store.ts';
 import type { TIngredient } from '@utils/types.ts';
 
-/**
- * Element of the filling. The whole ingredient is kept in the store, while
- * `key` keeps every entry unique so duplicates can be tracked.
- */
 export type TConstructorIngredient = TIngredient & {
   key: string;
 };
 
-type TConstructorState = {
+type TBurgerConstructorState = {
   bun: TIngredient | null;
   ingredients: TConstructorIngredient[];
 };
 
-const initialState: TConstructorState = {
+const initialState: TBurgerConstructorState = {
   bun: null,
   ingredients: [],
 };
@@ -70,9 +67,16 @@ export const burgerConstructorSlice = createSlice({
   selectors: {
     selectBun: (state) => state.bun,
     selectConstructorIngredients: (state) => state.ingredients,
-    selectAllIngredients: (state) => [state.bun, ...state.ingredients],
   },
 });
+
+export const selectAllIngredients = createSelector(
+  [
+    (state: RootState): TIngredient | null => state.burgerConstructor.bun,
+    (state: RootState): TConstructorIngredient[] => state.burgerConstructor.ingredients,
+  ],
+  (bun, ingredients): TIngredient[] => (bun ? [bun, ...ingredients] : [...ingredients])
+);
 
 export const {
   addIngredient,
@@ -81,5 +85,5 @@ export const {
   clearConstructor,
   setBun,
 } = burgerConstructorSlice.actions;
-export const { selectBun, selectConstructorIngredients, selectAllIngredients } =
+export const { selectBun, selectConstructorIngredients } =
   burgerConstructorSlice.selectors;

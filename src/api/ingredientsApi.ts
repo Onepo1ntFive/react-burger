@@ -19,6 +19,10 @@ export const ingredientsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: API_URL,
     prepareHeaders: (headers) => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        headers.set('authorization', token);
+      }
       for (const [key, value] of Object.entries(API_HEADERS)) {
         headers.set(key, value);
       }

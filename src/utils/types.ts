@@ -1,3 +1,10 @@
+import type { Location } from 'react-router-dom';
+
+export type TLocationState = {
+  backgroundLocation?: Location;
+  from?: Location;
+};
+
 export type TIngredient = {
   _id: string;
   name: string;
@@ -11,4 +18,9 @@ export type TIngredient = {
   image_large: string;
   image_mobile: string;
   __v: number;
+};
+
+export type TUserData = {
+  email: string;
+  name: string;
 };
