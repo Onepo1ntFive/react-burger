@@ -4,6 +4,7 @@ import {
   Input,
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components';
+import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { Link, matchPath, Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -13,12 +14,22 @@ import { Layout } from '@components/layout/layout.tsx';
 import { selectUser } from '@services/user/slice.ts';
 import { getErrorMessage } from '@utils/errors.ts';
 
+import type { TEditableField, TProfileForm } from '@utils/types.ts';
 import type * as React from 'react';
 
 import styles from './profile.module.css';
 
 export const PageProfile = (): React.JSX.Element => {
   const { pathname } = useLocation();
+
+  const [form, setForm] = useState<TProfileForm>({ name: '', email: '', password: '' });
+  const [editing, setEditing] = useState<Record<TEditableField, boolean>>({
+    name: false,
+    email: false,
+    password: false,
+  });
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
   const user = useSelector(selectUser);
   const navigate = useNavigate();
   const [logoutUser] = useLogoutUserMutation();
@@ -35,6 +46,31 @@ export const PageProfile = (): React.JSX.Element => {
       void navigate('/login');
     }
   };
+  const handleChange =
+    (field: keyof TProfileForm) =>
+    (event: React.ChangeEvent<HTMLInputElement>): void => {
+      setForm((prev) => ({ ...prev, [field]: event.target.value }));
+    };
+
+  const handleIconClick = (field: TEditableField): void => {
+    setEditing((prev) => ({ ...prev, [field]: true }));
+
+    const refs: Record<TEditableField, React.RefObject<HTMLInputElement | null>> = {
+      name: nameRef,
+      email: emailRef,
+    };
+    setTimeout(() => {
+      refs[field].current?.focus();
+    }, 0);
+  };
+
+  useEffect(() => {
+    setForm((prev) => ({
+      ...prev,
+      name: user?.name ?? '',
+      email: user?.email ?? '',
+    }));
+  }, [user]);
   return (
     <Layout>
       <div className={`${styles.profile}`}>
@@ -70,35 +106,39 @@ export const PageProfile = (): React.JSX.Element => {
             <Form>
               <Input
                 extraClass={'pb-6'}
-                errorText="Ошибка"
+                icon={!editing.name ? 'EditIcon' : undefined}
                 name="name"
                 placeholder="Имя"
                 size="default"
-                type="email"
-                icon="EditIcon"
-                readOnly
-                value={user?.name ?? ''}
-                onChange={() => ''}
+                type="text"
+                value={form.name}
+                disabled={!editing.name}
+                onChange={handleChange('name')}
+                onIconClick={() => {
+                  handleIconClick('name');
+                }}
+                ref={nameRef}
               />
               <Input
                 extraClass={'pb-6'}
-                errorText="Ошибка"
-                name="login"
+                icon={!editing.email ? 'EditIcon' : undefined}
+                name="email"
                 placeholder="Логин"
                 size="default"
                 type="email"
-                icon="EditIcon"
-                readOnly
-                value={user?.email ?? ''}
-                onChange={() => ''}
+                value={form.email}
+                disabled={!editing.email}
+                onChange={handleChange('email')}
+                onIconClick={() => {
+                  handleIconClick('email');
+                }}
+                ref={emailRef}
               />
               <PasswordInput
-                value="пароликтоспрятали"
-                icon="EditIcon"
-                readOnly
-                onChange={() => ''}
                 name="password"
                 placeholder="Пароль"
+                value={form.password}
+                onChange={handleChange('password')}
               />
             </Form>
           ) : (

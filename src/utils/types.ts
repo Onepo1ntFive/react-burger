@@ -24,3 +24,11 @@ export type TUserData = {
   email: string;
   name: string;
 };
+
+export type TProfileForm = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+export type TEditableField = 'name' | 'email' | 'password';

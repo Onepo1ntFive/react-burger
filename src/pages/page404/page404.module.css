@@ -1,0 +1,16 @@
+.page404 {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.page404 a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.page404 a:hover {
+  text-decoration: underline;
+}

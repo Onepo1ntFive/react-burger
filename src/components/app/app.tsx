@@ -14,6 +14,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 
 import { IngredientModal } from '@components/ingredient-modal/ingredient-modal.tsx';
 import { ProtectedRoute } from '@components/protected-route/protected-route.tsx';
+import { Page404 } from '@pages/page404/page404.tsx';
 import { useAppDispatch } from '@services/hooks.ts';
 import { checkUserAuth } from '@services/user/actions.ts';
 
@@ -50,6 +51,8 @@ export const App = (): React.JSX.Element => {
           <Route path="/forgot-password" element={<PageForgotPassword />} />
           <Route path="/reset-password" element={<PageResetPassword />} />
         </Route>
+
+        <Route path="*" element={<Page404 />} />
       </Routes>
 
       {backgroundLocation && (

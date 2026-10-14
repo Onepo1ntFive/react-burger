@@ -30,7 +30,9 @@ export const AppHeader = (): React.JSX.Element => {
           </Link>
         </div>
         <div className={styles.logo}>
-          <Logo />
+          <Link to={'/'}>
+            <Logo />
+          </Link>
         </div>
         <Link
           to="/profile"
