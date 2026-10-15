@@ -26,7 +26,6 @@ export const PageProfile = (): React.JSX.Element => {
   const [editing, setEditing] = useState<Record<TEditableField, boolean>>({
     name: false,
     email: false,
-    password: false,
   });
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -63,6 +62,22 @@ export const PageProfile = (): React.JSX.Element => {
       refs[field].current?.focus();
     }, 0);
   };
+
+  const handleCancel = (): void => {
+    setForm({ name: user?.name ?? '', email: user?.email ?? '', password: '' });
+    setEditing({ name: false, email: false });
+  };
+
+  const handleSubmit = (): void => {
+    console.log('Тут будет сохранение..');
+  };
+
+  const isDirty =
+    form.name !== (user?.name ?? '') ||
+    form.email !== (user?.email ?? '') ||
+    form.password !== '' ||
+    editing.name ||
+    editing.email;
 
   useEffect(() => {
     setForm((prev) => ({
@@ -106,7 +121,7 @@ export const PageProfile = (): React.JSX.Element => {
             <Form>
               <Input
                 extraClass={'pb-6'}
-                icon={!editing.name ? 'EditIcon' : undefined}
+                icon="EditIcon"
                 name="name"
                 placeholder="Имя"
                 size="default"
@@ -121,7 +136,7 @@ export const PageProfile = (): React.JSX.Element => {
               />
               <Input
                 extraClass={'pb-6'}
-                icon={!editing.email ? 'EditIcon' : undefined}
+                icon="EditIcon"
                 name="email"
                 placeholder="Логин"
                 size="default"
@@ -135,11 +150,35 @@ export const PageProfile = (): React.JSX.Element => {
                 ref={emailRef}
               />
               <PasswordInput
+                extraClass={'pb-6'}
+                icon="EditIcon"
                 name="password"
                 placeholder="Пароль"
                 value={form.password}
                 onChange={handleChange('password')}
               />
+              {isDirty && (
+                <div>
+                  <Button
+                    htmlType="button"
+                    size="medium"
+                    type="primary"
+                    onClick={() => {
+                      void handleSubmit();
+                    }}
+                  >
+                    Сохранить
+                  </Button>
+                  <Button
+                    htmlType="button"
+                    size="medium"
+                    type="secondary"
+                    onClick={handleCancel}
+                  >
+                    Отмена
+                  </Button>
+                </div>
+              )}
             </Form>
           ) : (
             <Outlet />

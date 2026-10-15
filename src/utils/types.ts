@@ -31,4 +31,4 @@ export type TProfileForm = {
   password: string;
 };
 
-export type TEditableField = 'name' | 'email' | 'password';
+export type TEditableField = 'name' | 'email';
