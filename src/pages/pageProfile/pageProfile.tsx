@@ -68,7 +68,9 @@ export const PageProfile = (): React.JSX.Element => {
     setEditing({ name: false, email: false });
   };
 
-  const handleSubmit = (): void => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    setEditing({ name: false, email: false });
     console.log('Тут будет сохранение..');
   };
 
@@ -119,66 +121,61 @@ export const PageProfile = (): React.JSX.Element => {
         <div className={styles.profile_content}>
           {matchPath('/profile', pathname) ? (
             <Form>
-              <Input
-                extraClass={'pb-6'}
-                icon="EditIcon"
-                name="name"
-                placeholder="Имя"
-                size="default"
-                type="text"
-                value={form.name}
-                disabled={!editing.name}
-                onChange={handleChange('name')}
-                onIconClick={() => {
-                  handleIconClick('name');
-                }}
-                ref={nameRef}
-              />
-              <Input
-                extraClass={'pb-6'}
-                icon="EditIcon"
-                name="email"
-                placeholder="Логин"
-                size="default"
-                type="email"
-                value={form.email}
-                disabled={!editing.email}
-                onChange={handleChange('email')}
-                onIconClick={() => {
-                  handleIconClick('email');
-                }}
-                ref={emailRef}
-              />
-              <PasswordInput
-                extraClass={'pb-6'}
-                icon="EditIcon"
-                name="password"
-                placeholder="Пароль"
-                value={form.password}
-                onChange={handleChange('password')}
-              />
-              {isDirty && (
-                <div>
-                  <Button
-                    htmlType="button"
-                    size="medium"
-                    type="primary"
-                    onClick={() => {
-                      void handleSubmit();
-                    }}
-                  >
-                    Сохранить
-                  </Button>
-                  <Button
-                    htmlType="button"
-                    size="medium"
-                    type="secondary"
-                    onClick={handleCancel}
-                  >
-                    Отмена
-                  </Button>
-                </div>
-              )}
+              <form onSubmit={handleSubmit}>
+                <Input
+                  extraClass={'pb-6'}
+                  icon="EditIcon"
+                  name="name"
+                  placeholder="Имя"
+                  size="default"
+                  type="text"
+                  value={form.name}
+                  disabled={!editing.name}
+                  onChange={handleChange('name')}
+                  onIconClick={() => {
+                    handleIconClick('name');
+                  }}
+                  ref={nameRef}
+                />
+                <Input
+                  extraClass={'pb-6'}
+                  icon="EditIcon"
+                  name="email"
+                  placeholder="Логин"
+                  size="default"
+                  type="email"
+                  value={form.email}
+                  disabled={!editing.email}
+                  onChange={handleChange('email')}
+                  onIconClick={() => {
+                    handleIconClick('email');
+                  }}
+                  ref={emailRef}
+                />
+                <PasswordInput
+                  extraClass={'pb-6'}
+                  icon="EditIcon"
+                  name="password"
+                  placeholder="Пароль"
+                  value={form.password}
+                  onChange={handleChange('password')}
+                />
+                {isDirty && (
+                  <div>
+                    <Button htmlType="submit" size="medium" type="primary">
+                      Сохранить
+                    </Button>
+                    <Button
+                      htmlType="button"
+                      size="medium"
+                      type="secondary"
+                      onClick={handleCancel}
+                    >
+                      Отмена
+                    </Button>
+                  </div>
+                )}
+              </form>
             </Form>
           ) : (
             <Outlet />
