@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useDrop } from 'react-dnd';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { ConstructorIngredient } from '@components/constructor-ingredient/constructor-ingredient.tsx';
 import { Modal } from '@components/modal/modal.tsx';
@@ -21,6 +22,7 @@ import {
   selectConstructorIngredients,
   setBun,
 } from '@services/burgerConstructor/slice.ts';
+import { selectIsAuthorized } from '@services/user/slice.ts';
 
 import type { TIngredient } from '@utils/types';
 
@@ -53,6 +55,8 @@ type TOrderResponse = {
 export const BurgerConstructor = ({
   ingredients,
 }: TBurgerConstructorProps): React.JSX.Element => {
+  const navigate = useNavigate();
+  const isAuthorized = useSelector(selectIsAuthorized);
   const dispatch = useDispatch();
   const [postOrder, { isLoading }] = usePostOrderMutation();
   const selectedBun = useSelector(selectBun);
@@ -92,6 +96,13 @@ export const BurgerConstructor = ({
     selectedIngredients.reduce((sum, item) => sum + item.price, 0);
 
   const postOrderHandler = async (): Promise<void> => {
+    if (!isAuthorized) {
+      toast.error('Ты не авторизован! А надо, что бы сделать заказ!', {
+        icon: '😱',
+      });
+      void navigate('/login');
+      return;
+    }
     const preparedOrder: string[] = selectedIngredients.map((el: TIngredient) => el._id);
 
     if (selectedBun && selectedIngredients) {
