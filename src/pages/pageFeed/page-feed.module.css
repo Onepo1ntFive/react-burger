@@ -1,0 +1,5 @@
+.page_feed_col {
+  display: flex;
+  flex-flow: column nowrap;
+  width: calc(50% - 30px);
+}

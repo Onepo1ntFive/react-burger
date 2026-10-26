@@ -1,4 +1,3 @@
-import { useForgotPasswordMutation } from '@api/userApi.ts';
 import { Button, Input } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -6,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { Form } from '@components/form/form.tsx';
 import { Layout } from '@components/layout/layout.tsx';
+import { useForgotPasswordMutation } from '@services/api/userApi.ts';
 import { getErrorMessage } from '@utils/errors.ts';
 
 import type * as React from 'react';

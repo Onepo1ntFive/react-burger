@@ -1,8 +1,9 @@
-import { ingredientsApi } from '@api/ingredientsApi.ts';
-import { orderApi } from '@api/orderApi.ts';
-import { userApi } from '@api/userApi.ts';
 import { combineSlices, configureStore as createStore } from '@reduxjs/toolkit';
 
+import { feedApi } from '@services/api/feedApi.ts';
+import { ingredientsApi } from '@services/api/ingredientsApi.ts';
+import { orderApi } from '@services/api/orderApi.ts';
+import { userApi } from '@services/api/userApi.ts';
 import { burgerConstructorSlice } from '@services/burgerConstructor/slice.ts';
 import { ingredientSlice } from '@services/ingredient/slice.ts';
 import { userDataSlice } from '@services/user/slice.ts';
@@ -13,7 +14,8 @@ const rootReducer = combineSlices(
   userDataSlice,
   burgerConstructorSlice,
   orderApi,
-  userApi
+  userApi,
+  feedApi
 );
 
 export const configureStore = (): typeof store => {
@@ -30,6 +32,7 @@ export const store = createStore({
     return getDefaultMiddleware()
       .concat(ingredientsApi.middleware)
       .concat(orderApi.middleware)
-      .concat(userApi.middleware);
+      .concat(userApi.middleware)
+      .concat(feedApi.middleware);
   },
 });

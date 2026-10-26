@@ -1,20 +1,11 @@
-import { useLogoutUserMutation } from '@api/userApi.ts';
-import {
-  Button,
-  Input,
-  PasswordInput,
-} from '@krgaa/react-developer-burger-ui-components';
-import { useEffect, useRef, useState } from 'react';
+import { Button } from '@krgaa/react-developer-burger-ui-components';
 import toast from 'react-hot-toast';
-import { useSelector } from 'react-redux';
 import { Link, matchPath, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { Form } from '@components/form/form.tsx';
 import { Layout } from '@components/layout/layout.tsx';
-import { selectUser } from '@services/user/slice.ts';
+import { useLogoutUserMutation } from '@services/api/userApi.ts';
 import { getErrorMessage } from '@utils/errors.ts';
 
-import type { TEditableField, TProfileForm } from '@utils/types.ts';
 import type * as React from 'react';
 
 import styles from './profile.module.css';
@@ -22,14 +13,6 @@ import styles from './profile.module.css';
 export const PageProfile = (): React.JSX.Element => {
   const { pathname } = useLocation();
 
-  const [form, setForm] = useState<TProfileForm>({ name: '', email: '', password: '' });
-  const [editing, setEditing] = useState<Record<TEditableField, boolean>>({
-    name: false,
-    email: false,
-  });
-  const nameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const user = useSelector(selectUser);
   const navigate = useNavigate();
   const [logoutUser] = useLogoutUserMutation();
   const logoutUserHandler = async (): Promise<void> => {
@@ -45,49 +28,7 @@ export const PageProfile = (): React.JSX.Element => {
       void navigate('/login');
     }
   };
-  const handleChange =
-    (field: keyof TProfileForm) =>
-    (event: React.ChangeEvent<HTMLInputElement>): void => {
-      setForm((prev) => ({ ...prev, [field]: event.target.value }));
-    };
 
-  const handleIconClick = (field: TEditableField): void => {
-    setEditing((prev) => ({ ...prev, [field]: true }));
-
-    const refs: Record<TEditableField, React.RefObject<HTMLInputElement | null>> = {
-      name: nameRef,
-      email: emailRef,
-    };
-    setTimeout(() => {
-      refs[field].current?.focus();
-    }, 0);
-  };
-
-  const handleCancel = (): void => {
-    setForm({ name: user?.name ?? '', email: user?.email ?? '', password: '' });
-    setEditing({ name: false, email: false });
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
-    setEditing({ name: false, email: false });
-    console.log('Тут будет сохранение..');
-  };
-
-  const isDirty =
-    form.name !== (user?.name ?? '') ||
-    form.email !== (user?.email ?? '') ||
-    form.password !== '' ||
-    editing.name ||
-    editing.email;
-
-  useEffect(() => {
-    setForm((prev) => ({
-      ...prev,
-      name: user?.name ?? '',
-      email: user?.email ?? '',
-    }));
-  }, [user]);
   return (
     <Layout>
       <div className={`${styles.profile}`}>
@@ -114,72 +55,21 @@ export const PageProfile = (): React.JSX.Element => {
           >
             Выход
           </Button>
-          <div className="text text_type_main-default text_color_inactive pt-20">
-            В этом разделе вы можете изменить свои персональные данные
+          <div className="text text_type_main-default text_color_inactive pt-10">
+            {matchPath('/profile', pathname) ? (
+              <>В этом разделе вы можете изменить свои персональные данные</>
+            ) : (
+              ''
+            )}
+            {matchPath('/profile/orders', pathname) ? (
+              <>В этом разделе вы можете просмотреть свою историю заказов</>
+            ) : (
+              ''
+            )}
           </div>
         </nav>
         <div className={styles.profile_content}>
-          {matchPath('/profile', pathname) ? (
-            <Form>
-              <form onSubmit={handleSubmit}>
-                <Input
-                  extraClass={'pb-6'}
-                  icon="EditIcon"
-                  name="name"
-                  placeholder="Имя"
-                  size="default"
-                  type="text"
-                  value={form.name}
-                  disabled={!editing.name}
-                  onChange={handleChange('name')}
-                  onIconClick={() => {
-                    handleIconClick('name');
-                  }}
-                  ref={nameRef}
-                />
-                <Input
-                  extraClass={'pb-6'}
-                  icon="EditIcon"
-                  name="email"
-                  placeholder="Логин"
-                  size="default"
-                  type="email"
-                  value={form.email}
-                  disabled={!editing.email}
-                  onChange={handleChange('email')}
-                  onIconClick={() => {
-                    handleIconClick('email');
-                  }}
-                  ref={emailRef}
-                />
-                <PasswordInput
-                  extraClass={'pb-6'}
-                  icon="EditIcon"
-                  name="password"
-                  placeholder="Пароль"
-                  value={form.password}
-                  onChange={handleChange('password')}
-                />
-                {isDirty && (
-                  <div>
-                    <Button htmlType="submit" size="medium" type="primary">
-                      Сохранить
-                    </Button>
-                    <Button
-                      htmlType="button"
-                      size="medium"
-                      type="secondary"
-                      onClick={handleCancel}
-                    >
-                      Отмена
-                    </Button>
-                  </div>
-                )}
-              </form>
-            </Form>
-          ) : (
-            <Outlet />
-          )}
+          <Outlet />
         </div>
       </div>
     </Layout>

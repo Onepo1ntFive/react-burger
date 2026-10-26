@@ -17,6 +17,7 @@ type TConstructorIngredientProps = {
   index: number;
   onMove: (fromIndex: number, toIndex: number) => void;
   onRemove: (key: string) => void;
+  isLocked?: boolean;
 };
 
 type TDragItem = {
@@ -28,6 +29,7 @@ export const ConstructorIngredient = ({
   index,
   onMove,
   onRemove,
+  isLocked,
 }: TConstructorIngredientProps): React.JSX.Element => {
   const rowRef = useRef<HTMLDivElement>(null);
 
@@ -96,6 +98,7 @@ export const ConstructorIngredient = ({
       <ConstructorElement
         price={ingredient.price}
         text={ingredient.name}
+        isLocked={isLocked}
         thumbnail={ingredient.image}
         handleClose={() => {
           onRemove(ingredient.key);

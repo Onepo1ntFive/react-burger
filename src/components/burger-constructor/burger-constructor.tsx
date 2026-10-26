@@ -1,4 +1,3 @@
-import { type TOrderDetails, usePostOrderMutation } from '@api/orderApi.ts';
 import {
   Button,
   ConstructorElement,
@@ -13,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { ConstructorIngredient } from '@components/constructor-ingredient/constructor-ingredient.tsx';
 import { Modal } from '@components/modal/modal.tsx';
 import { OrderDetails } from '@components/order-details/order-details.tsx';
+import { type TOrderDetails, usePostOrderMutation } from '@services/api/orderApi.ts';
 import {
   addIngredient,
   clearConstructor,
@@ -36,20 +36,6 @@ type TConstructorElementType = 'top' | 'bottom' | undefined;
 
 type TDropItem = {
   _id: string;
-};
-
-type TOrderResponse = {
-  data?: {
-    success?: boolean;
-    order?: {
-      number?: number;
-    };
-  };
-  error?: {
-    data?: {
-      message?: string;
-    };
-  };
 };
 
 export const BurgerConstructor = ({
@@ -107,17 +93,22 @@ export const BurgerConstructor = ({
 
     if (selectedBun && selectedIngredients) {
       try {
-        const response: TOrderResponse = await postOrder({
+        const response = await postOrder({
           ingredients: [selectedBun._id, ...preparedOrder, selectedBun._id],
         });
 
-        if (response?.error) {
-          toast.error(`ERROR: ${response.error?.data?.message}`);
+        if (response.error) {
+          const errorData = 'data' in response.error ? response.error.data : undefined;
+          const message =
+            (errorData as { message?: string } | undefined)?.message ??
+            ('error' in response.error ? response.error.error : undefined);
+
+          toast.error(`ERROR: ${message ?? 'Не удалось оформить заказ'}`);
         }
 
-        if (response?.data?.success) {
+        if (response.data?.success) {
           toast.success('Успех!');
-          setOrderDetails(response.data as TOrderDetails);
+          setOrderDetails(response.data);
           setIsOrderDetailsVisible(true);
           dispatch(clearConstructor());
         }
@@ -175,6 +166,7 @@ export const BurgerConstructor = ({
                   key={item.key}
                   ingredient={item}
                   index={index}
+                  isLocked={isLoading}
                   onMove={moveIngredientHandler}
                   onRemove={removeIngredientHandler}
                 />
@@ -218,6 +210,7 @@ export const BurgerConstructor = ({
             {totalPrice} <CurrencyIcon className={'ml-2'} type="primary" />
           </div>
           <Button
+            extraClass={isLoading ? 'button-loading' : ''}
             onClick={() => {
               void postOrderHandler();
             }}

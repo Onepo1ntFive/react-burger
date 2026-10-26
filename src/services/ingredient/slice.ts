@@ -1,5 +1,6 @@
-import { ingredientsApi } from '@api/ingredientsApi.ts';
 import { createSlice } from '@reduxjs/toolkit';
+
+import { ingredientsApi } from '@services/api/ingredientsApi.ts';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { TIngredient } from '@utils/types';
@@ -29,6 +30,7 @@ export const ingredientSlice = createSlice({
     },
   },
   selectors: {
+    selectIngredients: (state) => state.ingredients,
     selectIngredient: (state) => state.ingredient,
     selectIsIngredientDetailsVisible: (state) => state.ingredient !== null,
   },
@@ -44,5 +46,5 @@ export const ingredientSlice = createSlice({
 
 export const { setIngredientForDetails, clearIngredientForDetails } =
   ingredientSlice.actions;
-export const { selectIngredient, selectIsIngredientDetailsVisible } =
+export const { selectIngredients, selectIngredient, selectIsIngredientDetailsVisible } =
   ingredientSlice.selectors;

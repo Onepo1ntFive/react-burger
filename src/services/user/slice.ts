@@ -1,5 +1,6 @@
-import { userApi } from '@api/userApi.ts';
 import { createSlice } from '@reduxjs/toolkit';
+
+import { userApi } from '@services/api/userApi.ts';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { TUserData } from '@utils/types';

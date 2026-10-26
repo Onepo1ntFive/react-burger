@@ -1,4 +1,3 @@
-import { useRegisterUserMutation } from '@api/userApi.ts';
 import {
   Button,
   Input,
@@ -10,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { Form } from '@components/form/form.tsx';
 import { Layout } from '@components/layout/layout.tsx';
+import { useRegisterUserMutation } from '@services/api/userApi.ts';
 import { getErrorMessage } from '@utils/errors.ts';
 
 import type * as React from 'react';

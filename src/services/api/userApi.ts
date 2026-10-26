@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 import {
   API_LOGIN,
@@ -6,9 +6,10 @@ import {
   API_PSWD_RESET,
   API_PSWD_RESET_RESET,
   API_REGISTER,
-  API_URL,
   API_USER,
 } from '@utils/consts.ts';
+
+import { baseQuery } from './baseQuery.ts';
 
 import type { TUserData } from '@utils/types.ts';
 
@@ -55,57 +56,45 @@ export type TResetResetPassword = {
 
 export const userApi = createApi({
   reducerPath: 'userApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: API_URL,
-    prepareHeaders: (headers) => {
-      headers.set('Content-Type', 'application/json');
-
-      const token = localStorage.getItem('accessToken');
-      if (token) {
-        headers.set('authorization', token);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery,
   endpoints: (builder) => ({
     getUser: builder.query<TUserResponse, void>({
       query: () => ({
-        url: `${API_URL}${API_USER}`,
+        url: API_USER,
         method: 'GET',
       }),
     }),
     registerUser: builder.mutation<TAuthResponse, TUserRegister>({
       query: (body) => ({
-        url: `${API_URL}${API_REGISTER}`,
+        url: API_REGISTER,
         method: 'POST',
         body,
       }),
     }),
     loginUser: builder.mutation<TAuthResponse, TUserLogin>({
       query: (body) => ({
-        url: `${API_URL}${API_LOGIN}`,
+        url: API_LOGIN,
         method: 'POST',
         body,
       }),
     }),
     logoutUser: builder.mutation<TMessageResponse, TUserLogout>({
       query: (body) => ({
-        url: `${API_URL}${API_LOGOUT}`,
+        url: API_LOGOUT,
         method: 'POST',
         body,
       }),
     }),
     forgotPassword: builder.mutation<TMessageResponse, TResetPassword>({
       query: (body) => ({
-        url: `${API_URL}${API_PSWD_RESET}`,
+        url: API_PSWD_RESET,
         method: 'POST',
         body,
       }),
     }),
     resetPassword: builder.mutation<TMessageResponse, TResetResetPassword>({
       query: (body) => ({
-        url: `${API_URL}${API_PSWD_RESET_RESET}`,
+        url: API_PSWD_RESET_RESET,
         method: 'POST',
         body,
       }),

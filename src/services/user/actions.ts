@@ -1,5 +1,6 @@
-import { userApi } from '@api/userApi.ts';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import { userApi } from '@services/api/userApi.ts';
 
 import { clearUserData, setAuthChecked, setUserData } from './slice.ts';
 

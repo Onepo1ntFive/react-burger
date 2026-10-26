@@ -1,4 +1,3 @@
-import { useLoginUserMutation } from '@api/userApi.ts';
 import {
   Button,
   Input,
@@ -11,6 +10,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { Form } from '@components/form/form.tsx';
 import { Layout } from '@components/layout/layout.tsx';
+import { useLoginUserMutation } from '@services/api/userApi.ts';
 import { setUserData } from '@services/user/slice.ts';
 import { getErrorMessage } from '@utils/errors.ts';
 

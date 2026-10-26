@@ -1,0 +1,20 @@
+.feed_queue {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.feed_queue_col {
+  width: calc(50% - 18px);
+}
+
+.feed_queue_highlight {
+  color: var(--text-highlight);
+}
+
+.feed_count_shadow {
+  text-shadow:
+    0 4px 32px rgb(51 51 255 / 50%),
+    0 0 8px rgb(51 51 255 / 25%),
+    0 0 16px rgb(51 51 255 / 25%);
+}
