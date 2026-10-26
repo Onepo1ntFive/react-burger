@@ -1,7 +1,7 @@
 import { CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
+import { useAppSelector } from '@services/hooks.ts';
 import { selectIngredients } from '@services/ingredient/slice.ts';
 import { formatFullOrderDate, formatOrderDate } from '@utils/formatDate.ts';
 
@@ -20,7 +20,7 @@ export const FeedItem = ({
   index,
 }: TBurgerIngredientsProps): React.JSX.Element => {
   const location = useLocation();
-  const ingredients = useSelector(selectIngredients);
+  const ingredients = useAppSelector(selectIngredients);
   const findIngredientById = (id: string): TIngredient | undefined => {
     return ingredients.find((el) => el._id === id);
   };

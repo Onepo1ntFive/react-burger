@@ -6,7 +6,6 @@ import {
 import { useState } from 'react';
 import { useDrop } from 'react-dnd';
 import toast from 'react-hot-toast';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { ConstructorIngredient } from '@components/constructor-ingredient/constructor-ingredient.tsx';
@@ -22,6 +21,7 @@ import {
   selectConstructorIngredients,
   setBun,
 } from '@services/burgerConstructor/slice.ts';
+import { useAppDispatch, useAppSelector } from '@services/hooks.ts';
 import { selectIsAuthorized } from '@services/user/slice.ts';
 
 import type { TIngredient } from '@utils/types';
@@ -42,11 +42,11 @@ export const BurgerConstructor = ({
   ingredients,
 }: TBurgerConstructorProps): React.JSX.Element => {
   const navigate = useNavigate();
-  const isAuthorized = useSelector(selectIsAuthorized);
-  const dispatch = useDispatch();
+  const isAuthorized = useAppSelector(selectIsAuthorized);
+  const dispatch = useAppDispatch();
   const [postOrder, { isLoading }] = usePostOrderMutation();
-  const selectedBun = useSelector(selectBun);
-  const selectedIngredients = useSelector(selectConstructorIngredients);
+  const selectedBun = useAppSelector(selectBun);
+  const selectedIngredients = useAppSelector(selectConstructorIngredients);
   const [isOrderDetailsVisible, setIsOrderDetailsVisible] = useState<boolean>(false);
   const [orderDetails, setOrderDetails] = useState<TOrderDetails | null>(null);
 

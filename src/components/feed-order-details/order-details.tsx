@@ -1,6 +1,6 @@
 import { CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
 
+import { useAppSelector } from '@services/hooks.ts';
 import { selectIngredients } from '@services/ingredient/slice.ts';
 import { order_statuses } from '@utils/consts.ts';
 import { formatOrderDate } from '@utils/formatDate.ts';
@@ -17,7 +17,7 @@ type TOrderDetailsProps = {
 type TIngredientWithCount = TIngredient & { count: number };
 
 export const OrderDetails = ({ order }: TOrderDetailsProps): React.JSX.Element => {
-  const ingredients = useSelector(selectIngredients);
+  const ingredients = useAppSelector(selectIngredients);
   const uniqueOrderIngredients = [...new Set(order.ingredients)];
   const findIngredientById = (id: string): TIngredientWithCount | undefined => {
     const ingredient = ingredients.find((el) => el._id === id);

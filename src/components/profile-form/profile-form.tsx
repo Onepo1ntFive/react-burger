@@ -4,16 +4,16 @@ import {
   PasswordInput,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Form } from '@components/form/form.tsx';
+import { useAppSelector } from '@services/hooks.ts';
 import { selectUser } from '@services/user/slice.ts';
 
 import type { TEditableField, TProfileForm } from '@utils/types.ts';
 import type * as React from 'react';
 
 export const ProfileForm = (): React.JSX.Element => {
-  const user = useSelector(selectUser);
+  const user = useAppSelector(selectUser);
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState<TProfileForm>({ name: '', email: '', password: '' });

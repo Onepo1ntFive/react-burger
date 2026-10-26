@@ -5,12 +5,12 @@ import {
 } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { Form } from '@components/form/form.tsx';
 import { Layout } from '@components/layout/layout.tsx';
 import { useLoginUserMutation } from '@services/api/userApi.ts';
+import { useAppDispatch } from '@services/hooks.ts';
 import { setUserData } from '@services/user/slice.ts';
 import { getErrorMessage } from '@utils/errors.ts';
 
@@ -18,7 +18,7 @@ import type { TLocationState } from '@utils/types.ts';
 import type * as React from 'react';
 
 export const PageLogin = (): React.JSX.Element => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as TLocationState | null)?.from?.pathname ?? '/';
