@@ -1,4 +1,3 @@
-import { type TOrderDetails, usePostOrderMutation } from '@api/orderApi.ts';
 import {
   Button,
   ConstructorElement,
@@ -7,12 +6,12 @@ import {
 import { useState } from 'react';
 import { useDrop } from 'react-dnd';
 import toast from 'react-hot-toast';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { ConstructorIngredient } from '@components/constructor-ingredient/constructor-ingredient.tsx';
 import { Modal } from '@components/modal/modal.tsx';
 import { OrderDetails } from '@components/order-details/order-details.tsx';
+import { type TOrderDetails, usePostOrderMutation } from '@services/api/orderApi.ts';
 import {
   addIngredient,
   clearConstructor,
@@ -22,6 +21,7 @@ import {
   selectConstructorIngredients,
   setBun,
 } from '@services/burgerConstructor/slice.ts';
+import { useAppDispatch, useAppSelector } from '@services/hooks.ts';
 import { selectIsAuthorized } from '@services/user/slice.ts';
 
 import type { TIngredient } from '@utils/types';
@@ -38,29 +38,15 @@ type TDropItem = {
   _id: string;
 };
 
-type TOrderResponse = {
-  data?: {
-    success?: boolean;
-    order?: {
-      number?: number;
-    };
-  };
-  error?: {
-    data?: {
-      message?: string;
-    };
-  };
-};
-
 export const BurgerConstructor = ({
   ingredients,
 }: TBurgerConstructorProps): React.JSX.Element => {
   const navigate = useNavigate();
-  const isAuthorized = useSelector(selectIsAuthorized);
-  const dispatch = useDispatch();
+  const isAuthorized = useAppSelector(selectIsAuthorized);
+  const dispatch = useAppDispatch();
   const [postOrder, { isLoading }] = usePostOrderMutation();
-  const selectedBun = useSelector(selectBun);
-  const selectedIngredients = useSelector(selectConstructorIngredients);
+  const selectedBun = useAppSelector(selectBun);
+  const selectedIngredients = useAppSelector(selectConstructorIngredients);
   const [isOrderDetailsVisible, setIsOrderDetailsVisible] = useState<boolean>(false);
   const [orderDetails, setOrderDetails] = useState<TOrderDetails | null>(null);
 
@@ -107,17 +93,22 @@ export const BurgerConstructor = ({
 
     if (selectedBun && selectedIngredients) {
       try {
-        const response: TOrderResponse = await postOrder({
+        const response = await postOrder({
           ingredients: [selectedBun._id, ...preparedOrder, selectedBun._id],
         });
 
-        if (response?.error) {
-          toast.error(`ERROR: ${response.error?.data?.message}`);
+        if (response.error) {
+          const errorData = 'data' in response.error ? response.error.data : undefined;
+          const message =
+            (errorData as { message?: string } | undefined)?.message ??
+            ('error' in response.error ? response.error.error : undefined);
+
+          toast.error(`ERROR: ${message ?? 'Не удалось оформить заказ'}`);
         }
 
-        if (response?.data?.success) {
+        if (response.data?.success) {
           toast.success('Успех!');
-          setOrderDetails(response.data as TOrderDetails);
+          setOrderDetails(response.data);
           setIsOrderDetailsVisible(true);
           dispatch(clearConstructor());
         }
@@ -175,6 +166,7 @@ export const BurgerConstructor = ({
                   key={item.key}
                   ingredient={item}
                   index={index}
+                  isLocked={isLoading}
                   onMove={moveIngredientHandler}
                   onRemove={removeIngredientHandler}
                 />
@@ -218,6 +210,7 @@ export const BurgerConstructor = ({
             {totalPrice} <CurrencyIcon className={'ml-2'} type="primary" />
           </div>
           <Button
+            extraClass={isLoading ? 'button-loading' : ''}
             onClick={() => {
               void postOrderHandler();
             }}

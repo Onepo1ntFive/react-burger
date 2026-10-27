@@ -1,11 +1,12 @@
 import { Toaster } from 'react-hot-toast';
+import { Outlet } from 'react-router-dom';
 
 import { AppHeader } from '@components/app-header/app-header';
 
 import styles from './layout.module.css';
 
 type TLayoutProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   title?: string;
 };
 
@@ -26,7 +27,7 @@ export const Layout = ({ children, title }: TLayoutProps): React.JSX.Element => 
               position: 'bottom-center',
             }}
           />
-          {children}
+          {children ?? <Outlet />}
         </main>
       </div>
     </>

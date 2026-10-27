@@ -32,3 +32,22 @@ export type TProfileForm = {
 };
 
 export type TEditableField = 'name' | 'email';
+
+export type TFeedResponse = {
+  success: boolean;
+  orders: TFeedOrder[];
+  total: number;
+  totalToday: number;
+};
+
+export type TFeedOrderStatus = 'created' | 'pending' | 'done';
+
+export type TFeedOrder = {
+  createdAt: string;
+  ingredients: string[];
+  name: string;
+  number: number;
+  status: string;
+  updatedAt: string;
+  _id: string;
+};

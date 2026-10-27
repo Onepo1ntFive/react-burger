@@ -148,6 +148,7 @@ table {
 .main {
   display: flex;
   flex: 1 auto;
+  justify-content: space-between;
   width: 100%;
   max-width: 1240px;
   height: 0;

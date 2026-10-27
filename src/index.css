@@ -17,6 +17,7 @@ html {
   --interface-modal-bg: #1c1c21;
   --interface-modal-overlay-bg: rgb(0 0 0 / 60%);
   --text-secondary: #6666d9;
+  --text-highlight: #0cc;
   --text-inactive: #8585ad;
 }
 
@@ -87,7 +88,8 @@ html {
   content: 'Лоадинх..';
 }
 
-.button-loading {
+.button-loading,
+.button-loading:disabled {
   color: transparent;
 }
 

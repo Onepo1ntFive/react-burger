@@ -3,7 +3,7 @@ export { PageHome } from '@pages/pageHome/pageHome.tsx';
 export { PageIngredientDetail } from '@pages/pageIngredientDetail/pageIngredientDetail.tsx';
 export { PageLogin } from '@pages/pageLogin/pageLogin.tsx';
 export { PageProfile } from '@pages/pageProfile/pageProfile.tsx';
-export { PageProfileOrder } from '@pages/pageProfileOrder/pageProfileOrder.tsx';
 export { PageRegister } from '@pages/pageRegister/pageRegister.tsx';
 export { PageResetPassword } from '@pages/pageResetPassword/pageResetPassword.tsx';
 export { PageFeed } from '@pages/pageFeed/pageFeed.tsx';
+export { PageOrderDetail } from '@pages/pageOrderDetail/pageOrderDetail.tsx';

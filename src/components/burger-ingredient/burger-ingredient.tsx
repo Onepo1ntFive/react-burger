@@ -1,9 +1,9 @@
 import { Counter, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
 import { useDrag } from 'react-dnd';
-import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
 import { selectAllIngredients } from '@services/burgerConstructor/slice.ts';
+import { useAppSelector } from '@services/hooks.ts';
 
 import type { TIngredient } from '@utils/types';
 
@@ -26,7 +26,7 @@ export const BurgerIngredient = ({
     }),
   });
 
-  const selectedIngredients = useSelector(selectAllIngredients);
+  const selectedIngredients = useAppSelector(selectAllIngredients);
   const count = selectedIngredients.filter((el) => {
     if (el) {
       return el._id === ingredient._id;

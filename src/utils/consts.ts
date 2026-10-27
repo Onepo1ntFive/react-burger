@@ -1,21 +1,18 @@
-const API_URL = 'https://new-stellarburgers.education-services.ru/api';
-const API_USER = '/auth/user';
-const API_INGREDIENTS = '/ingredients';
-const API_ORDER = '/orders';
-const API_REGISTER = '/auth/register';
-const API_LOGIN = '/auth/login';
-const API_LOGOUT = '/auth/logout';
-const API_PSWD_RESET = '/password-reset';
-const API_PSWD_RESET_RESET = '/password-reset/reset';
+export const API_URL = 'https://new-stellarburgers.education-services.ru/api';
+export const WSS_FEED_URL = 'wss://new-stellarburgers.education-services.ru/orders';
+export const WSS_FEED_ALL = '/all';
+export const API_USER = '/auth/user';
+export const API_INGREDIENTS = '/ingredients';
+export const API_ORDER = '/orders';
+export const API_REGISTER = '/auth/register';
+export const API_LOGIN = '/auth/login';
+export const API_LOGOUT = '/auth/logout';
+export const API_PSWD_RESET = '/password-reset';
+export const API_PSWD_RESET_RESET = '/password-reset/reset';
+export const FEED_CACHE_KEY = 'orders/all';
 
-export {
-  API_URL,
-  API_USER,
-  API_INGREDIENTS,
-  API_ORDER,
-  API_REGISTER,
-  API_LOGIN,
-  API_LOGOUT,
-  API_PSWD_RESET,
-  API_PSWD_RESET_RESET,
+export const order_statuses = {
+  created: 'Создан',
+  pending: 'В работе',
+  done: 'Выполнен',
 };

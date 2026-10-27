@@ -1,9 +1,9 @@
 import { Preloader, Tab } from '@krgaa/react-developer-burger-ui-components';
 import { Fragment, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { BurgerIngredient } from '@components/burger-ingredient/burger-ingredient.tsx';
 import { IngredientModal } from '@components/ingredient-modal/ingredient-modal.tsx';
+import { useAppSelector } from '@services/hooks.ts';
 import {
   selectIngredient,
   selectIsIngredientDetailsVisible,
@@ -39,8 +39,8 @@ export const BurgerIngredients = ({
     return [];
   }, [ingredients]);
 
-  const ingredient = useSelector(selectIngredient);
-  const isIngredientDetailsVisible = useSelector(selectIsIngredientDetailsVisible);
+  const ingredient = useAppSelector(selectIngredient);
+  const isIngredientDetailsVisible = useAppSelector(selectIsIngredientDetailsVisible);
 
   const [activeTab, setActiveTab] = useState('bun');
 
