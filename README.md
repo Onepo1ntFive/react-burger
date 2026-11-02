@@ -2,6 +2,8 @@
 
 # Собери космически вкеусный БУРГЕР!
 
+ДЕМО тут - https://onepo1ntfive.github.io/react-burger/
+
 ## Запуск тестового сервера
 
 - npm run dev
