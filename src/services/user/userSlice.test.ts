@@ -19,7 +19,6 @@ const mockUserData: TUserData = {
   name: 'Тест',
   email: 'test@test.com',
 };
-const mockInitialState = { ...initialState };
 const mockAuthorizedState = { ...initialState, user: mockUserData, isAuthChecked: true };
 const mockCheckedNoUserState = { ...initialState, isAuthChecked: true };
 
@@ -54,7 +53,7 @@ describe('userSlice', () => {
   });
 
   it('устанавливает данные пользователя', () => {
-    const result = userDataSlice.reducer(mockInitialState, setUserData(mockUserData));
+    const result = userDataSlice.reducer(initialState, setUserData(mockUserData));
     expect(result.user).toEqual(mockUserData);
     expect(result.isAuthChecked).toBe(false);
   });
@@ -81,7 +80,7 @@ describe('userSlice', () => {
   });
 
   it('возвращает данные пустого пользователя', () => {
-    const result = selectUser({ userData: mockInitialState });
+    const result = selectUser({ userData: initialState });
     expect(result).toBeNull();
   });
 
@@ -116,7 +115,7 @@ describe('userSlice', () => {
 
   it('getUser fulfilled: записывает пользователя и отмечает проверку', () => {
     const result = userDataSlice.reducer(
-      mockInitialState,
+      initialState,
       queryFulfilled('getUser', { user: mockUserData })
     );
 

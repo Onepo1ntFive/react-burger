@@ -2,6 +2,7 @@ import { describe, it } from 'vitest';
 
 import { ingredientsApi } from '@services/api/ingredientsApi.ts';
 
+import { makeIngredient } from '../../../tests/utils.ts';
 import {
   clearIngredientForDetails,
   ingredientSlice,
@@ -11,23 +12,7 @@ import {
   setIngredientForDetails,
 } from './slice.ts';
 
-import type { TIngredient, TModalState } from '@utils/types.ts';
-
-const makeIngredient = (overrides: Partial<TIngredient>): TIngredient => ({
-  _id: 'ingredient-id',
-  name: 'Ингредиент',
-  type: 'sauce',
-  proteins: 0,
-  fat: 0,
-  carbohydrates: 0,
-  calories: 0,
-  price: 100,
-  image: 'image.svg',
-  image_large: 'image-large.svg',
-  image_mobile: 'image-mobile.svg',
-  __v: 0,
-  ...overrides,
-});
+import type { TModalState } from '@utils/types.ts';
 
 const bun = makeIngredient({ _id: 'bun-id', name: 'Булка', type: 'bun', price: 100 });
 const sauce = makeIngredient({ _id: 'sauce-id', name: 'Соус', price: 50 });
