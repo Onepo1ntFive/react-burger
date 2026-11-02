@@ -25,6 +25,16 @@ export type TUserData = {
   name: string;
 };
 
+export type TUserState = {
+  user: TUserData | null;
+  isAuthChecked: boolean;
+};
+
+export type TModalState = {
+  ingredient: TIngredient | null;
+  ingredients: TIngredient[] | [];
+};
+
 export type TProfileForm = {
   name: string;
   email: string;

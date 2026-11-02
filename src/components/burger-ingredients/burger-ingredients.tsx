@@ -136,7 +136,7 @@ export const BurgerIngredients = ({
                   ) : (
                     ''
                   )}
-                  <BurgerIngredient ingredient={item} />
+                  <BurgerIngredient ingredient={item} index={index} />
                 </Fragment>
               ));
             })}

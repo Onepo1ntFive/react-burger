@@ -138,6 +138,7 @@ export const BurgerConstructor = ({
         <div
           className={`${styles.burger_constructor_list} ${isOver || canDrop ? styles.burger_constructor_active : ''}`}
           ref={dropTarget}
+          data-testid="constructor-drop-to-container"
         >
           <div className={`${styles.burger_constructor_item} mb-4 pr-2`}>
             {selectedBun ? (
@@ -218,6 +219,7 @@ export const BurgerConstructor = ({
             htmlType="button"
             size="large"
             type="primary"
+            data-testid="order-submit"
           >
             Оформить заказ
           </Button>

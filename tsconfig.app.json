@@ -39,5 +39,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "e2e"],
+  "include": [
+    "src",
+    "tests",
+    "node_modules/vitest/globals.d.ts"
+  ]
 }

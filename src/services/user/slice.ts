@@ -3,14 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import { userApi } from '@services/api/userApi.ts';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { TUserData } from '@utils/types';
+import type { TUserData, TUserState } from '@utils/types';
 
-type TUserState = {
-  user: TUserData | null;
-  isAuthChecked: boolean;
-};
-
-const initialState: TUserState = {
+export const initialState: TUserState = {
   user: null,
   isAuthChecked: false,
 };

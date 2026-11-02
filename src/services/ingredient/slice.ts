@@ -3,12 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { ingredientsApi } from '@services/api/ingredientsApi.ts';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { TIngredient } from '@utils/types';
-
-type TModalState = {
-  ingredient: TIngredient | null;
-  ingredients: TIngredient[] | [];
-};
+import type { TModalState } from '@utils/types';
 
 const initialState: TModalState = {
   ingredient: null,

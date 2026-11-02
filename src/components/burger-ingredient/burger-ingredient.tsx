@@ -11,10 +11,12 @@ import styles from './burger-ingredient.module.css';
 
 type TBurgerIngredientsProps = {
   ingredient: TIngredient;
+  index: number;
 };
 
 export const BurgerIngredient = ({
   ingredient,
+  index,
 }: TBurgerIngredientsProps): React.JSX.Element => {
   const location = useLocation();
   const { _id } = ingredient;
@@ -36,6 +38,7 @@ export const BurgerIngredient = ({
     <div
       className={`p-4 ${styles.burger_ingredient} ${isDrag ? 'isDrag' : ''}`}
       ref={dragRef}
+      data-testid={`constructor-is-drug-container-${ingredient.type}-${index}`}
     >
       <Link
         className={styles.burger_ingredient_link}
