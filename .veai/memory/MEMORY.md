@@ -1,0 +1,1 @@
+- [Do not modify feedApi.ts](Do_not_modify_feedApi_ts-da6b3e32c2dc.md) — User asked not to touch src/services/api/feedApi.ts — their own WIP WebSocket feed API
