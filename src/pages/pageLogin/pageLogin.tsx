@@ -43,7 +43,9 @@ export const PageLogin = (): React.JSX.Element => {
   return (
     <Layout>
       <Form>
-        <h1 className="text text_type_main-medium pb-6">Вход</h1>
+        <h1 data-testid="login-page-title" className="text text_type_main-medium pb-6">
+          Вход
+        </h1>
         <form
           onSubmit={(event) => {
             void loginUserHandler(event);

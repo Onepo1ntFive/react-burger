@@ -39,7 +39,9 @@ export const AppHeader = (): React.JSX.Element => {
           className={`${styles.link} ${matchPath('/profile', pathname) ? styles.link_active : ''} ${styles.link_position_last}`}
         >
           <ProfileIcon type="secondary" />
-          <p className="text text_type_main-default ml-2">Личный кабинет</p>
+          <p className="text text_type_main-default ml-2" data-testid="profile-link">
+            Личный кабинет
+          </p>
         </Link>
       </nav>
     </header>

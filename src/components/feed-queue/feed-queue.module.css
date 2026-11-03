@@ -2,6 +2,7 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  overflow: hidden auto;
 }
 
 .feed_queue_col {

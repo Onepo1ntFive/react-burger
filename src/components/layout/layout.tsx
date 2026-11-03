@@ -16,7 +16,10 @@ export const Layout = ({ children, title }: TLayoutProps): React.JSX.Element => 
       <div className={styles.app}>
         <AppHeader />
         {title && (
-          <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
+          <h1
+            data-testid="page-title"
+            className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}
+          >
             {title}
           </h1>
         )}

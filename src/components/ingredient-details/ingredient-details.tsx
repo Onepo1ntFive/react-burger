@@ -18,7 +18,12 @@ export const IngredientDetails = ({
             src={ingredient.image_large}
             alt={ingredient.name}
           />
-          <div className={'text text_type_main-medium pt-4 pb-8'}>{ingredient.name}</div>
+          <div
+            className={'text text_type_main-medium pt-4 pb-8'}
+            data-testid="constructor-modal-ingredient-name"
+          >
+            {ingredient.name}
+          </div>
           <ul className={`${styles.ingredient_ingredients}`}>
             <li>
               Калории, ккал{' '}
